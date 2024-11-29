@@ -111,6 +111,20 @@ export class DiscordBot {
 			throw error;
 		}
 	}
+
+	public async cleanup() {
+		if (!this.client.application) {
+			throw new Error('Application not ready');
+		}
+
+		const data = await this.fetch.put(
+			Routes.applicationGuildCommands(
+				this.client.application.id,
+				testGuildId || '',
+			),
+			{ body: [] },
+		);
+	}
 }
 
 export const initializeBot = async () => {
