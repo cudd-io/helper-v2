@@ -1,2 +1,25 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import { authClient } from '$lib/features/auth/client';
+	import { useGetMe } from '$lib/features/discord/hooks/queries.svelte';
+	import { Routes } from 'discord-api-types/v10';
+
+	const session = authClient.useSession();
+
+	const { data } = $props();
+
+	const discordUser = useGetMe({
+		authToken: data.auth?.account?.accessToken || '',
+	});
+</script>
+
+<h2 class="text-2xl font-semibold">Dashboard</h2>
+
+<pre>{JSON.stringify(
+		{
+			auth: data.auth,
+			route: Routes.user('@me'),
+			discordUser: $discordUser,
+		},
+		null,
+		2,
+	)}</pre>
