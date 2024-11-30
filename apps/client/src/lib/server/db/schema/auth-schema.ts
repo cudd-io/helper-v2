@@ -1,10 +1,4 @@
-import type { username } from 'better-auth/plugins';
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-
-// export const user = sqliteTable('user', {
-// 	id: integer('id').primaryKey(),
-// 	name: integer('name'),
-// });
 
 export const user = sqliteTable('user', {
 	id: text('id').primaryKey(),
@@ -58,7 +52,6 @@ export const account = sqliteTable('account', {
 		mode: 'timestamp',
 	}),
 	scope: text('scope'),
-	password: text('password'),
 	createdAt: integer('createdAt', {
 		mode: 'timestamp',
 	}).notNull(),

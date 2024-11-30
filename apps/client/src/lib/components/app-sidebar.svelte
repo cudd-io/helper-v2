@@ -1,44 +1,24 @@
 <script lang="ts" module>
-	import AudioWaveform from 'lucide-svelte/icons/audio-waveform';
 	import Bot from 'lucide-svelte/icons/bot';
-	import Command from 'lucide-svelte/icons/command';
-	import GalleryVerticalEnd from 'lucide-svelte/icons/gallery-vertical-end';
 	import Settings2 from 'lucide-svelte/icons/settings-2';
-	import SquareTerminal from 'lucide-svelte/icons/square-terminal';
+	import LayoutDashboard from 'lucide-svelte/icons/layout-dashboard';
 
 	const data = {
-		guilds: [
-			{
-				name: 'Midnight Oasis',
-				logo: GalleryVerticalEnd,
-				plan: 'Pro',
-			},
-			{
-				name: `Erika's test server`,
-				logo: AudioWaveform,
-				plan: 'Free',
-			},
-			{
-				name: 'My Server',
-				logo: Command,
-				plan: 'Free',
-			},
-		],
 		navMain: [
 			{
 				title: 'Dashboard',
-				url: '#',
-				icon: SquareTerminal,
+				url: '/',
+				icon: LayoutDashboard,
 				isActive: true,
 			},
 			{
 				title: 'Commands',
-				url: '#',
+				url: '/commands',
 				icon: Bot,
 			},
 			{
 				title: 'Settings',
-				url: '#',
+				url: '/settings',
 				icon: Settings2,
 			},
 		],
@@ -51,9 +31,9 @@
 	import GuildSwitcher from '$lib/components/guild-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
-	import { useGetMe } from '$lib/features/discord/hooks/queries.svelte';
+	import { useGetBotGuilds, useGetMe } from '$lib/features/discord/hooks/queries.svelte';
 	import { page } from '$app/stores';
-	import type { APIUser } from 'discord-api-types/v10';
+	import type { APIGuild, APIUser } from 'discord-api-types/v10';
 
 	let {
 		ref = $bindable(null),
@@ -66,6 +46,8 @@
 	const discordUser = useGetMe({
 		authToken: auth?.account?.accessToken || '',
 	});
+
+	const botGuilds = useGetBotGuilds({});
 
 	const getUser = (userData?: APIUser) => {
 		if ($discordUser.data) {
@@ -83,12 +65,31 @@
 		}
 	};
 
+	const getGuilds = (guildsData?: APIGuild[]) => {
+		if ($botGuilds.data) {
+			return $botGuilds.data.map((guild, i) => ({
+				name: guild.name,
+				logo: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`,
+				plan: guild.premium_tier === 0 ? 'Free' : 'Pro', // Obviously Helper doesn't have a pro tier, this is just a placeholder for now
+			}));
+		} else {
+			return [
+				{
+					name: 'loading...',
+					logo: `https://placewaifu.com/image/64?index=${999}`,
+					plan: 'Free',
+				},
+			];
+		}
+	};
+
 	let user = $derived(getUser($discordUser.data));
+	let guilds = $derived(getGuilds($botGuilds.data));
 </script>
 
 <Sidebar.Root bind:ref {collapsible} {...restProps}>
 	<Sidebar.Header>
-		<GuildSwitcher guilds={data.guilds} />
+		<GuildSwitcher {guilds} />
 	</Sidebar.Header>
 	<Sidebar.Content>
 		<NavMain items={data.navMain} />

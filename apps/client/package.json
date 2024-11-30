@@ -50,6 +50,7 @@
 		"better-auth": "^1.0.6",
 		"discord-api-types": "^0.37.110",
 		"drizzle-orm": "^0.33.0",
+		"ky": "^1.7.2",
 		"runed": "^0.15.4",
 		"svelte-legos": "^0.2.5"
 	}

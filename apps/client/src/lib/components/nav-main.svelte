@@ -33,7 +33,6 @@
 							{#if mainItem.icon}
 								<mainItem.icon />
 							{/if}
-							<!-- <mainItem.icon /> -->
 							<span>{mainItem.title}</span>
 						</a>
 					{/snippet}
