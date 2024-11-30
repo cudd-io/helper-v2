@@ -11,5 +11,5 @@ const client = createClient({ url: env.DATABASE_URL, authToken: env.DATABASE_AUT
 
 export const db = drizzle(client, {
 	schema,
-	logger: dev,
+	// logger: dev,
 });

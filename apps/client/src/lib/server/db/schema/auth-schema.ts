@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 export const user = sqliteTable('user', {
@@ -14,6 +15,7 @@ export const user = sqliteTable('user', {
 	updatedAt: integer('updatedAt', {
 		mode: 'timestamp',
 	}).notNull(),
+	selectedGuild: text('selectedGuild'),
 });
 
 export const session = sqliteTable('session', {
@@ -74,3 +76,22 @@ export const verification = sqliteTable('verification', {
 		mode: 'timestamp',
 	}),
 });
+
+// export const userSelectedGuild = sqliteTable('selected_guild', {
+// 	id: text('id').primaryKey(),
+// 	guildId: text('guildId'),
+// 	userId: text('userId')
+// 		.notNull()
+// 		.references(() => user.id),
+// });
+
+// export const usersRelations = relations(user, ({ one }) => ({
+// 	selectedGuild: one(userSelectedGuild),
+// }));
+
+// export const userSelectedGuildRelations = relations(userSelectedGuild, ({ one }) => ({
+// 	user: one(user, {
+// 		fields: [userSelectedGuild.userId],
+// 		references: [user.id],
+// 	}),
+// }));

@@ -1,13 +1,15 @@
-import { toReadable } from '$lib/utils/reactive-query-args.svelte';
 import { createQuery } from '@tanstack/svelte-query';
+import { toReadable } from '$lib/utils/reactive-query-args.svelte';
+import type { BaseQueryParams } from '$lib/types';
+
 import {
 	getMe,
 	getMyGuilds,
 	type DiscordQueryParams,
 	type GetBotGuildsQueryParams,
-	type BaseQueryParams,
 	getBotGuild,
 	getBotGuilds,
+	getGuildMembers,
 } from '../api/queries';
 
 export const useGetMe = (params: DiscordQueryParams) =>
@@ -20,3 +22,6 @@ export const useGetBotGuild = (params: GetBotGuildsQueryParams) =>
 
 export const useGetBotGuilds = (params: BaseQueryParams) =>
 	createQuery(toReadable(() => getBotGuilds(params)));
+
+export const useGetGuildMembers = (params: GetBotGuildsQueryParams) =>
+	createQuery(toReadable(() => getGuildMembers(params)));

@@ -26,9 +26,9 @@
 </script>
 
 <script lang="ts">
-	import NavMain from '$lib/components/nav-main.svelte';
-	import NavUser from '$lib/components/nav-user.svelte';
-	import GuildSwitcher from '$lib/components/guild-switcher.svelte';
+	import NavMain from '$lib/components/sidebar/nav-main.svelte';
+	import NavUser from '$lib/components/sidebar/nav-user.svelte';
+	import GuildSwitcher from '$lib/components/sidebar/guild-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import type { ComponentProps } from 'svelte';
 	import { useGetBotGuilds, useGetMe } from '$lib/features/discord/hooks/queries.svelte';
@@ -65,26 +65,8 @@
 		}
 	};
 
-	const getGuilds = (guildsData?: APIGuild[]) => {
-		if ($botGuilds.data) {
-			return $botGuilds.data.map((guild, i) => ({
-				name: guild.name,
-				logo: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`,
-				plan: guild.premium_tier === 0 ? 'Free' : 'Pro', // Obviously Helper doesn't have a pro tier, this is just a placeholder for now
-			}));
-		} else {
-			return [
-				{
-					name: 'loading...',
-					logo: `https://placewaifu.com/image/64?index=${999}`,
-					plan: 'Free',
-				},
-			];
-		}
-	};
-
 	let user = $derived(getUser($discordUser.data));
-	let guilds = $derived(getGuilds($botGuilds.data));
+	let guilds = $derived($botGuilds.data ?? []);
 </script>
 
 <Sidebar.Root bind:ref {collapsible} {...restProps}>

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { Routes } from 'discord-api-types/v10';
 	import { authClient } from '$lib/features/auth/client';
 	import { useGetMe } from '$lib/features/discord/hooks/queries.svelte';
 	import { getCurrentGuild } from '$lib/features/discord/state/current-guild.svelte';
-	import AppDashboard from '$lib/components/dashboard/app-dashboard.svelte';
+	import { useGetSelectedGuild } from '$lib/hooks/queries.svelte';
+	import { Routes } from 'discord-api-types/v10';
 
 	const session = authClient.useSession();
 
@@ -13,19 +13,21 @@
 		authToken: data.auth?.account?.accessToken || '',
 	});
 
-	const currentGuild = getCurrentGuild();
+	// const currentGuild = getCurrentGuild();
+	const selectedGuild = useGetSelectedGuild({});
+
+	const currentGuild = $derived($selectedGuild.data);
 </script>
 
-<AppDashboard />
-<!-- <h2 class="text-2xl font-semibold">Dashboard</h2>
+<h2 class="text-2xl font-semibold">Commands</h2>
 
 <pre>{JSON.stringify(
 		{
-			currentGuild: currentGuild.guild,
+			currentGuild,
 			// auth: data.auth,
 			// route: Routes.user('@me'),
 			// discordUser: $discordUser,
 		},
 		null,
 		2,
-	)}</pre> -->
+	)}</pre>

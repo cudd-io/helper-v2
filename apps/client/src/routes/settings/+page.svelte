@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { Routes } from 'discord-api-types/v10';
 	import { authClient } from '$lib/features/auth/client';
 	import { useGetMe } from '$lib/features/discord/hooks/queries.svelte';
 	import { getCurrentGuild } from '$lib/features/discord/state/current-guild.svelte';
-	import AppDashboard from '$lib/components/dashboard/app-dashboard.svelte';
+	import { Routes } from 'discord-api-types/v10';
 
 	const session = authClient.useSession();
 
@@ -16,8 +15,7 @@
 	const currentGuild = getCurrentGuild();
 </script>
 
-<AppDashboard />
-<!-- <h2 class="text-2xl font-semibold">Dashboard</h2>
+<h2 class="text-2xl font-semibold">Settings</h2>
 
 <pre>{JSON.stringify(
 		{
@@ -28,4 +26,4 @@
 		},
 		null,
 		2,
-	)}</pre> -->
+	)}</pre>

@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-svelte';
+
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { useSidebar } from '$lib/components/ui/sidebar';
-	import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-svelte';
 
 	let { user }: { user: { name: string; username: string; avatar: string } } = $props();
 	const sidebar = useSidebar();
@@ -25,7 +26,7 @@
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">{user.name}</span>
-							<span class="text-muted-foreground truncate text-xs">{user.username}</span>
+							<span class="truncate text-xs text-muted-foreground">{user.username}</span>
 						</div>
 						<ChevronsUpDown class="ml-auto size-4" />
 					</Sidebar.MenuButton>
@@ -45,7 +46,7 @@
 						</Avatar.Root>
 						<div class="grid flex-1 text-left text-sm leading-tight">
 							<span class="truncate font-semibold">{user.name}</span>
-							<span class="text-muted-foreground truncate text-xs">{user.username}</span>
+							<span class="truncate text-xs text-muted-foreground">{user.username}</span>
 						</div>
 					</div>
 				</DropdownMenu.Label>
