@@ -1,12 +1,19 @@
 {
 	"name": "bun-vite-react-hono-monorepo-starter",
 	"workspaces": [
-		"./apps/*"
+		"./apps/*",
+		"./packages/*"
 	],
 	"scripts": {
 		"dev:client": "cd ./apps/client && bun run dev",
 		"dev:server": "cd ./apps/server && bun run dev",
-		"build:client": "cd ./apps/client && bun run build"
+		"build:client": "cd ./apps/client && bun run build",
+		"build:db": "cd ./packages/db && bun run build",
+		"env:clear": "rm ./apps/client/.env && rm ./apps/server/.env && rm ./packages/db/.env",
+		"env:copy": "cp .env ./apps/client/.env && cp .env ./apps/server/.env && cp .env ./packages/db/.env",
+		"env:prepare": "bun run env:clear && bun run env:copy",
+		"db:push": "cd ./packages/db && bun run db:push",
+		"db:studio": "cd ./packages/db && bun run db:studio"
 	},
 	"devDependencies": {
 		"bun-types": "latest"

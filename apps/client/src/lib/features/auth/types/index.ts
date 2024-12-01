@@ -1,11 +1,12 @@
-import type { account } from '$lib/server/db/schema';
+import type { AccountModel } from '@helper/db/types';
 import type { Session, User } from 'better-auth';
-import type { InferSelectModel } from 'drizzle-orm';
 
 export type AuthData = {
 	session: {
 		session: Session;
 		user: User;
 	};
-	account: InferSelectModel<typeof account>;
+	account: AccountModel;
 };
+
+let acc: AccountModel;

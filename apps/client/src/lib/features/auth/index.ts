@@ -3,8 +3,8 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { DISCORD_CLIENT_SECRET } from '$env/static/private';
 import { PUBLIC_DISCORD_CLIENT_ID, PUBLIC_BASE_URL } from '$env/static/public';
-import * as schema from '$lib/server/db/schema';
-import { OAuth2Scopes, Routes, type APIUser } from 'discord-api-types/v10';
+import * as schema from '@helper/db/schema';
+import { OAuth2Scopes } from 'discord-api-types/v10';
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -24,25 +24,6 @@ export const auth = betterAuth({
 				OAuth2Scopes.GuildsMembersRead,
 				OAuth2Scopes.Guilds,
 			],
-
-			// getUserInfo: async (tokens) => {
-			// 	// Custom logic to fetch and return user info
-			// 	// const userInfo = await fetchUserInfoFromCustomProvider(tokens);
-			// 	const userInfo: APIUser = await fetch(Routes.user('@me'), {
-			// 		headers: {
-			// 			Authorization: `Bearer ${tokens.accessToken}`,
-			// 		},
-			// 	}).then((res) => res.json());
-
-			// 	console.log({ userInfo });
-			// 	return {
-			// 		id: userInfo.id,
-			// 		email: userInfo.email,
-			// 		name: userInfo.username,
-			// 		tokens,
-			// 		// ... map other fields as needed
-			// 	};
-			// },
 		},
 	},
 });
