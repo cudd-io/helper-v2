@@ -8,13 +8,7 @@ A general purpose Discord bot with a flexible web interface for creating custom 
 
 ```sh
 git clone git@github.com:cudd-io/helper-v2.git
-```
-
-```sh
 cd helper-v2`
-```
-
-```sh
 bun install
 ```
 
