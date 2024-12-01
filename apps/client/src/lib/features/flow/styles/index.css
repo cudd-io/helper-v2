@@ -1,0 +1,42 @@
+.svelte-flow,
+.svelte-flow.light,
+.svelte-flow.dark {
+	@apply rounded-md border border-border bg-background text-foreground shadow-sm;
+
+	--xy-background-color-default: hsl(var(--sidebar-background));
+	--xy-edge-stroke-default: hsl(var(--sidebar-border));
+	--xy-edge-stroke-width-default: 1;
+	--xy-edge-stroke-selected-default: hsl(var(--ring) / 0.75);
+	--xy-connectionline-stroke-default: hsl(var(--sidebar-border));
+	--xy-connectionline-stroke-width-default: 1;
+	--xy-attribution-background-color-default: hsl(var(--sidebar-background));
+	--xy-minimap-background-color-default: hsl(var(--background));
+	--xy-background-pattern-dot-color-default: hsl(var(--sidebar-border));
+	--xy-background-pattern-line-color-default: hsl(var(--sidebar-border));
+	--xy-background-pattern-cross-color-default: hsl(var(--sidebar-border));
+	--xy-node-color-default: var(--sidebar-foreground);
+	--xy-node-border-default: 1px solid var(--sidebar-border);
+	--xy-node-background-color-default: hsl(var(--sidebar-accent));
+	--xy-node-group-background-color-default: hsl(var(--sidebar-accent) / 0.25);
+	--xy-node-boxshadow-hover-default: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--xy-node-boxshadow-selected-default: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+		0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--xy-handle-background-color-default: hsl(var(--sidebar-foreground) / 0.15);
+	--xy-handle-border-color-default: hsl(var(--background) / 0.08);
+	--xy-selection-background-color-default: hsl(var(--background) / 0.1);
+	--xy-selection-border-default: 1px dotted hsl(var(--background) / 0.75);
+	--xy-controls-button-background-color-default: hsl(var(--sidebar-accent));
+	--xy-controls-button-background-color-hover-default: hsl(var(--sidebar-accent) / 0.75);
+	--xy-controls-button-color-default: hsl(var(--sidebar-foreground));
+	--xy-controls-button-color-hover-default: hsl(var(--sidebar-foreground));
+	--xy-controls-button-border-color-default: hsl(var(--sidebar-border));
+	--xy-controls-box-shadow-default: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--xy-node-border-radius: var(--radius);
+
+	.svelte-flow__controls {
+		@apply flex flex-col gap-1;
+		button {
+			@apply rounded-lg;
+		}
+	}
+}

@@ -5,6 +5,7 @@
 	import { useGetSelectedGuild } from '$lib/hooks/queries.svelte';
 	import { Routes } from 'discord-api-types/v10';
 
+	import Flow from '$lib/features/flow/components/index.svelte';
 	const session = authClient.useSession();
 
 	const { data } = $props();
@@ -15,19 +16,23 @@
 
 	// const currentGuild = getCurrentGuild();
 	const selectedGuild = useGetSelectedGuild({});
-
 	const currentGuild = $derived($selectedGuild.data);
+	
 </script>
 
 <h2 class="text-2xl font-semibold">Commands</h2>
 
-<pre>{JSON.stringify(
-		{
-			currentGuild,
-			// auth: data.auth,
-			// route: Routes.user('@me'),
-			// discordUser: $discordUser,
+<Flow />
+
+
+<!-- <pre>{JSON.stringify(
+	{
+		currentGuild,
+		// auth: data.auth,
+		// route: Routes.user('@me'),
+		// discordUser: $discordUser,
 		},
 		null,
 		2,
-	)}</pre>
+		)}</pre> -->
+		

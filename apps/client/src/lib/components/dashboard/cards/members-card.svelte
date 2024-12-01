@@ -96,7 +96,7 @@
 		<div class="flex items-center gap-4">
 			<Avatar.Root
 				class={cn('hidden h-9 w-9 border-2 border-gray-200 sm:flex', {
-					// 'border-green-500': ,
+					// 'border-green-500': member,
 				})}
 			>
 				<Avatar.Image
