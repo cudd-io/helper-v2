@@ -27,7 +27,7 @@ Copy `.env` to all projects within the monorepo:
 bun run env:prepare
 ```
 
-### Set up the database
+### Setup the database
 
 Build the db package:
 
