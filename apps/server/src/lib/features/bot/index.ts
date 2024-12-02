@@ -47,11 +47,9 @@ export class DiscordBot {
 			}
 		});
 
-		// Handle slash commands
+		// Handle interactions
 		this.client.on(Events.InteractionCreate, async (interaction) => {
-			if (interaction.isChatInputCommand()) {
-				await this.handleInteraction(interaction);
-			}
+			await this.handleInteraction(interaction);
 		});
 	}
 
@@ -76,10 +74,20 @@ export class DiscordBot {
 	}
 
 	public async handleInteraction(interaction: Interaction) {
-		if (interaction.isCommand()) {
+		if (interaction.isChatInputCommand()) {
 			const command = this.commands.get(interaction.commandName);
 			if (command) {
 				await command.do(interaction);
+			}
+		}
+
+		if (interaction.isAutocomplete()) {
+			console.log('is autocomplete');
+			const command = this.commands.get(interaction.commandName);
+			if (command && command.autocomplete) {
+				await command.autocomplete(interaction);
+			} else {
+				console.log('no autocomplete command found', interaction.commandName);
 			}
 		}
 	}

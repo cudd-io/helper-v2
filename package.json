@@ -13,7 +13,8 @@
 		"env:copy": "cp .env ./apps/client/.env && cp .env ./apps/server/.env && cp .env ./packages/db/.env",
 		"env:prepare": "bun run env:clear && bun run env:copy",
 		"db:push": "cd ./packages/db && bun run db:push",
-		"db:studio": "cd ./packages/db && bun run db:studio"
+		"db:studio": "cd ./packages/db && bun run db:studio",
+		"db:update": "cd ./packages/db && bun run update"
 	},
 	"devDependencies": {
 		"bun-types": "latest"

@@ -3,7 +3,7 @@ import { db } from '$lib/server/db';
 import type { Session, User } from 'better-auth';
 import type { LayoutServerLoad } from './$types';
 import { account } from '$lib/server/db/schema';
-import type { InferSelectModel } from 'drizzle-orm';
+
 import type { AuthData } from '$lib/features/auth/types';
 
 const fetchAuthData = async ({ request }: { request: Request }) => {

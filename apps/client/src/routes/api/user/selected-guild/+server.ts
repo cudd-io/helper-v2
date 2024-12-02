@@ -3,7 +3,7 @@ import { db } from '$lib/server/db';
 import { getAuth } from '$lib/server/api';
 import { json, text } from '@sveltejs/kit';
 import { user } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq } from '@helper/db';
 
 export const GET: RequestHandler = async ({ request }) => {
 	try {

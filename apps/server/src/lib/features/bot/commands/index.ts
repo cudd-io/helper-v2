@@ -4,6 +4,8 @@ import { CommandInteraction } from 'discord.js';
 import { delay, times } from '../../../utils';
 import { createDiceEmbed, rollDice } from '../components/dice';
 
+import { commands as accountCommands } from './accounts';
+
 export const commands: ICommandData[] = [
 	{
 		command: new SlashCommandBuilder()
@@ -57,6 +59,7 @@ export const commands: ICommandData[] = [
 			});
 		},
 	},
+	...accountCommands,
 ];
 
 const animateReply = async (
