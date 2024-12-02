@@ -200,4 +200,4 @@ dist-ssr
 *.sln
 *.sw?
 
-*.bak
+db.bak

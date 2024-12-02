@@ -1,0 +1,43 @@
+{
+	"name": "@helper/db",
+	"type": "module",
+	"version": "0.0.0",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"description": "",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./schema": {
+			"import": "./dist/schema/index.js",
+			"types": "./dist/schema/index.d.ts"
+		},
+		"./types": {
+			"import": "./dist/types/index.js",
+			"types": "./dist/types/index.d.ts"
+		}
+	},
+	"scripts": {
+		"build": "bun run build.ts",
+		"prepublishOnly": "bun run build",
+		"db:push": "drizzle-kit push",
+		"db:migrate": "drizzle-kit migrate",
+		"db:studio": "drizzle-kit studio",
+		"sync": "bun run db:push && bun run build"
+	},
+	"files": [
+		"dist"
+	],
+	"dependencies": {
+		"@libsql/client": "^0.14.0",
+		"drizzle-orm": "^0.36.4"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.1.14",
+		"bun-plugin-dts": "^0.3.0",
+		"drizzle-kit": "^0.28.1"
+	}
+}
