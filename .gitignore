@@ -201,3 +201,6 @@ dist-ssr
 *.sw?
 
 db.bak
+
+local.db
+*.db

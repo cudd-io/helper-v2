@@ -32,10 +32,13 @@
 		"dist"
 	],
 	"dependencies": {
-		"@libsql/client": "^0.14.0",
+		"@libsql/client": "^0.15.0-pre.1",
+		"better-sqlite3": "^11.6.0",
+		"dotenv": "^16.4.5",
 		"drizzle-orm": "^0.36.4"
 	},
 	"devDependencies": {
+		"@types/better-sqlite3": "^7.6.12",
 		"@types/bun": "^1.1.14",
 		"bun-plugin-dts": "^0.3.0",
 		"drizzle-kit": "^0.28.1"
