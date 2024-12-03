@@ -20,10 +20,28 @@ export class DiscordUser<DB extends LibSQLDB> {
 		return user;
 	}
 
-	public async create(discordUser: NewDiscordUserModel) {
-		const user = await this.db.insert(schema.discordUser).values(discordUser);
+	public async create(discordUser: NewDiscordUserModel, upsert = false) {
+		if (!upsert) {
+			const acc = await this.db
+				.insert(schema.discordUser)
+				.values(discordUser)
+				.returning();
 
-		return user;
+			return acc[0];
+		}
+
+		const acc = await this.db
+			.insert(schema.discordUser)
+			.values(discordUser)
+			.onConflictDoUpdate({
+				target: schema.discordUser.discordId,
+				set: {
+					...discordUser,
+				},
+			})
+			.returning();
+
+		return acc[0];
 	}
 
 	public async update(
@@ -36,7 +54,7 @@ export class DiscordUser<DB extends LibSQLDB> {
 			.where(eq(schema.discordUser.discordId, discordId))
 			.returning();
 
-		return user;
+		return user[0];
 	}
 
 	public async delete(discordId: string) {

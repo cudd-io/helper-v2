@@ -1,6 +1,10 @@
 import type { BuildConfig } from 'bun';
 import dts from 'bun-plugin-dts';
 
+import './src';
+
+console.log('Building...');
+
 const defaultBuildConfig: BuildConfig = {
 	entrypoints: [
 		'./src/index.ts',
@@ -18,3 +22,5 @@ await Promise.all([
 		naming: '[dir]/[name].js',
 	}),
 ]);
+
+console.log('Build complete');

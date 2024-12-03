@@ -11,20 +11,28 @@ export const accountManager = {
 		return await discordUser.get(interaction.user.id);
 	},
 
-	createAccount: async (interaction: ChatInputCommandInteraction) => {
-		const account = await discordUser.create({
-			discordId: interaction.user.id,
-			name: interaction.user.username,
-			username: interaction.user.username,
-			joinedAt: '',
-			pronouns: '',
-			timezone: '',
+	createAccount: async (
+		interaction: ChatInputCommandInteraction,
+		account: {
+			timezone: string;
+			pronouns?: string;
+		},
+	) => {
+		const guild = interaction.guild;
+		const member = await guild?.members.fetch({
+			user: interaction.user.id,
 		});
-		// const account = await db.insert(schema.discordUser).values({
-		// 	discordId: interaction.user.id,
-		// 	name: interaction.user.username,
-		// 	username: interaction.user.username,
-		// });
-		// return account;
+		return await discordUser.create(
+			{
+				discordId: interaction.user.id,
+				name: interaction.user.displayName,
+				guildId: guild?.id || 'no-guild',
+				username: interaction.user.username,
+				joinedAt: `${member?.joinedTimestamp || Date.now().toString()}`,
+				pronouns: account.pronouns,
+				timezone: account.timezone,
+			},
+			true,
+		);
 	},
 };
