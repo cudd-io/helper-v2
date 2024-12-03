@@ -1,10 +1,14 @@
 import { LibSQLDatabase } from 'drizzle-orm/libsql';
 import * as schema from '../schema';
 import { NewDiscordUserModel } from '../types';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 type LibSQLDB = LibSQLDatabase<typeof schema>;
 
+type CompositeKey = {
+	discordId: string;
+	guildId: string;
+};
 export class DiscordUser<DB extends LibSQLDB> {
 	public db: DB;
 
@@ -12,9 +16,13 @@ export class DiscordUser<DB extends LibSQLDB> {
 		this.db = db;
 	}
 
-	public async get(discordId: string) {
+	public async get({ discordId, guildId }: CompositeKey) {
 		const user = await this.db.query.discordUser.findFirst({
-			where: (discordUser, { eq }) => eq(discordUser.discordId, discordId),
+			where: (discordUser, { eq, and }) =>
+				and(
+					eq(discordUser.discordId, discordId),
+					eq(discordUser.guildId, guildId),
+				),
 		});
 
 		return user;
@@ -34,7 +42,7 @@ export class DiscordUser<DB extends LibSQLDB> {
 			.insert(schema.discordUser)
 			.values(discordUser)
 			.onConflictDoUpdate({
-				target: schema.discordUser.discordId,
+				target: [schema.discordUser.discordId, schema.discordUser.guildId],
 				set: {
 					...discordUser,
 				},
@@ -45,13 +53,18 @@ export class DiscordUser<DB extends LibSQLDB> {
 	}
 
 	public async update(
-		discordId: string,
+		{ discordId, guildId }: CompositeKey,
 		discordUserData: Partial<NewDiscordUserModel>,
 	) {
 		const user = await this.db
 			.update(schema.discordUser)
 			.set(discordUserData)
-			.where(eq(schema.discordUser.discordId, discordId))
+			.where(
+				and(
+					eq(schema.discordUser.discordId, discordId),
+					eq(schema.discordUser.guildId, guildId),
+				),
+			)
 			.returning();
 
 		return user[0];

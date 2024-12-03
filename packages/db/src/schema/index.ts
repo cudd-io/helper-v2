@@ -14,7 +14,8 @@ export const discordUser = sqliteTable(
 		joinedAt: text('joinedAt').notNull(),
 	},
 	(table) => ({
-		id: primaryKey({
+		pk: primaryKey({
+			name: 'user_to_guild',
 			columns: [table.discordId, table.guildId],
 		}),
 	}),

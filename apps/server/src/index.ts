@@ -14,14 +14,25 @@ app.get('/commands/global', (c) => {
 	const commandsJSON = commands.map((cmd) => cmd.command.toJSON());
 	return c.json(commandsJSON);
 });
+
 let bot: DiscordBot;
+
 (async () => {
 	bot = await initializeBot();
 })();
 
+// app.get('/commands/cleanup', async (c) => {
+// 	try {
+// 		await bot.cleanup();
+// 		return c.json({ success: true });
+// 	} catch (e) {
+// 		return c.json({ success: false });
+// 	}
+// });
+
 // Handle graceful shutdown
 process.on('SIGINT', async () => {
-	await bot.stop();
+	// await bot.stop();
 	process.exit(0);
 });
 

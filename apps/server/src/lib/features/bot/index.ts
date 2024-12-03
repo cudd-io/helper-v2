@@ -63,6 +63,8 @@ export class DiscordBot {
 	}
 
 	public async stop() {
+		console.log('Doing cleanup...');
+		await this.cleanup();
 		await this.client.destroy();
 		console.log('Discord bot stopped');
 	}
@@ -82,7 +84,6 @@ export class DiscordBot {
 		}
 
 		if (interaction.isAutocomplete()) {
-			console.log('is autocomplete');
 			const command = this.commands.get(interaction.commandName);
 			if (command && command.autocomplete) {
 				await command.autocomplete(interaction);
@@ -100,20 +101,27 @@ export class DiscordBot {
 				throw new Error('Application not ready');
 			}
 
+			const guilds = await this.getAllGuildIds();
+
 			const commandsJSON = Array.from(this.commands.values()).map((cmd) =>
 				cmd.command.toJSON(),
 			);
 
-			const data = await this.fetch.put(
-				Routes.applicationGuildCommands(
-					this.client.application.id,
-					testGuildId || '',
-				),
-				{ body: commandsJSON },
-			);
+			const appId = this.client.application.id;
 
+			const promises = guilds.map((guild) => {
+				console.log('deploying to guild', guild.name);
+				return this.fetch.put(
+					Routes.applicationGuildCommands(appId, guild.id),
+					{
+						body: commandsJSON,
+					},
+				);
+			});
+
+			await Promise.all(promises);
 			console.log('Successfully reloaded application (/) commands.');
-			return data;
+			return;
 		} catch (error) {
 			console.error('Error deploying commands:', error);
 			throw error;
@@ -125,13 +133,27 @@ export class DiscordBot {
 			throw new Error('Application not ready');
 		}
 
-		const data = await this.fetch.put(
-			Routes.applicationGuildCommands(
-				this.client.application.id,
-				testGuildId || '',
-			),
-			{ body: [] },
-		);
+		const guilds = await this.getAllGuildIds();
+		const appId = this.client.application.id;
+
+		const promises = guilds.map((guild) => {
+			console.log('removing commands for guild', guild.name);
+			return this.fetch.put(Routes.applicationGuildCommands(appId, guild.id), {
+				body: [],
+			});
+		});
+
+		return Promise.all(promises);
+	}
+
+	public async getAllGuildIds() {
+		if (!this.client.application) {
+			throw new Error('Application not ready');
+		}
+
+		const guilds = await this.client.guilds.fetch();
+
+		return guilds;
 	}
 }
 

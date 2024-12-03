@@ -8,7 +8,11 @@ const discordUser = new DiscordUser(db);
 
 export const accountManager = {
 	getAccount: async (interaction: ChatInputCommandInteraction) => {
-		return await discordUser.get(interaction.user.id);
+		const guild = interaction.guild;
+		return await discordUser.get({
+			discordId: interaction.user.id,
+			guildId: guild?.id || 'no-guild',
+		});
 	},
 
 	createAccount: async (
