@@ -1,7 +1,8 @@
 {
 	"name": "@helper/server",
 	"scripts": {
-		"dev": "bun run --watch src/index.ts"
+		"dev": "bun run --watch src/index.ts",
+		"start": "bun run src/index.ts"
 	},
 	"dependencies": {
 		"@date-fns/tz": "^1.2.0",
