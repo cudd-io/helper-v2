@@ -27,23 +27,23 @@ export const subcommandDelete = createSubcommand({
 			return;
 		}
 
-		const member = await guild.members.fetch({
-			user: interaction.user.id,
-		});
-
 		const trigger = interaction.options.getString('name', true);
-		simpleCmds.delete({
-			guildId: guild.id,
-			trigger,
-		});
+
 		try {
+			simpleCmds.delete({
+				guildId: guild.id,
+				trigger,
+			});
+
 			await bot.refreshSimpleCommands(guild.id);
+
 			interaction.reply({
 				content: `Successfully deleted command: \`${trigger}\``,
 				ephemeral: true,
 			});
 		} catch (e) {
 			const adminId = '866367674980630588';
+
 			interaction.reply({
 				content: `Failed to delete command: \`${trigger}\` \nPlease notify <@866367674980630588> that there's an issue.`,
 				ephemeral: true,

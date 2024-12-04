@@ -80,6 +80,16 @@ export class DiscordBot {
 
 		const commandsArray = await simpleCmdCtrl.getAll(guildId);
 
+		if (guildId) {
+			this.simpleCommands.forEach((cmd, key) => {
+				if (key.startsWith(`${guildId}:`)) {
+					this.simpleCommands.delete(key);
+				}
+			});
+		} else {
+			this.simpleCommands.clear();
+		}
+
 		for (let cmd of commandsArray) {
 			const key = `${cmd.guildId}:${cmd.trigger}`;
 			this.simpleCommands.set(key, cmd);
