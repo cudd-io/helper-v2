@@ -1,4 +1,4 @@
-import './lib/features/bot/bot-instance';
+import './lib/features/bot/state/bot-state';
 import { Hono } from 'hono';
 import { DiscordBot, initializeBot } from './lib/features/bot/bot';
 import { commands } from './lib/features/bot/commands';

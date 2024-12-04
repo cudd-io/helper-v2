@@ -2,10 +2,11 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { ICommandData } from '../types';
 import { CommandInteraction } from 'discord.js';
 import { delay, times } from '../../../utils';
-import { createDiceEmbed, rollDice } from '../components/dice';
+import { createDiceEmbed, rollDice } from '../modules/dice';
 
 import { commands as accountCommands } from './accounts';
-import { commands as simpleCommands } from './user-commands/simple-commands';
+import { commands as timeCommands } from './time';
+import { commands as userCommands } from './user-commands';
 
 export const commands: ICommandData[] = [
 	{
@@ -61,7 +62,8 @@ export const commands: ICommandData[] = [
 		},
 	},
 	...accountCommands,
-	...simpleCommands,
+	...timeCommands,
+	...userCommands,
 ];
 
 const animateReply = async (

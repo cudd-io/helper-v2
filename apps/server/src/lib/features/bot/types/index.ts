@@ -21,3 +21,11 @@ export interface ICommandData {
 export * from './actions';
 export * from './inputs';
 export * from './conditions';
+
+export interface ISubcommandData {
+	name: string;
+	command: (
+		subcommand: SlashCommandSubcommandBuilder,
+	) => SlashCommandSubcommandBuilder;
+	do: (interaction: ChatInputCommandInteraction) => Promise<void>;
+}

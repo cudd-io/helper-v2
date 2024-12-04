@@ -1,12 +1,16 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
+import { SlashCommandBuilder } from 'discord.js';
+
+import db from '$lib/db';
 import { ICommandData } from '$lib/features/bot/types';
 import { handleSubcommand } from '$lib/features/bot/utils';
-import { autocompleteTimezone } from '$lib/features/bot/modules/autocomplete';
+import { SimpleCommand } from '@helper/db';
 import subcommands from './subcommands';
 
+const simpleCmds = new SimpleCommand(db);
+
 const command = new SlashCommandBuilder()
-	.setName('account')
-	.setDescription('Get your account information') as SlashCommandBuilder;
+	.setName('custom-command')
+	.setDescription('Create a custom command');
 
 for (let subcommand of subcommands) {
 	command.addSubcommand(subcommand.command);
@@ -19,7 +23,6 @@ const commandData: ICommandData = {
 			handleSubcommand(interaction, subcommand);
 		}
 	},
-	autocomplete: autocompleteTimezone,
 };
 
 export const commands = [commandData];

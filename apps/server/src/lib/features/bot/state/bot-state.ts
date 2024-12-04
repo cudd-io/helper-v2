@@ -1,4 +1,4 @@
-import { DiscordBot, initializeBot } from './bot';
+import { DiscordBot, initializeBot } from '../bot';
 
 export let bot: DiscordBot;
 
