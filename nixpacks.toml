@@ -1,4 +1,11 @@
 [phases.build]
-cmds = ['bun run build']
+cmds = ['bun run db:push', 'bun run build']
+
+[phases.install]
+cmds = ['bun install']
+
 [start]
-cmd = "bun run db:push && bun run start"
+cmd = "bun run postdeploy"
+
+[variables]
+NODE_ENV = 'production'
