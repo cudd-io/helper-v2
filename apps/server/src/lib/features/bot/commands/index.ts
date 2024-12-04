@@ -8,15 +8,28 @@ import { commands as accountCommands } from './accounts';
 import { commands as timeCommands } from './time';
 import { commands as userCommands } from './user-commands';
 
-export const commands: ICommandData[] = [
-	{
-		command: new SlashCommandBuilder()
-			.setName('ping')
-			.setDescription('Replies with Pong!'),
-		async do(interaction) {
-			await interaction.reply('Pong!');
+const findWinner = (results: string[]): string => {
+	const tally = results.reduce(
+		(acc, result) => {
+			acc[result] = (acc[result] || 0) + 1;
+			return acc;
 		},
-	},
+		{} as Record<string, number>,
+	);
+	if (tally['heads'] > tally['tails']) {
+		return '`heads`';
+	} else if (tally['tails'] > tally['heads']) {
+		return '`tails`';
+	} else {
+		return '`tie`';
+	}
+};
+
+const pluralize = (word: string, count: number): string => {
+	return count !== 1 ? `${word}s` : word;
+};
+
+export const commands: ICommandData[] = [
 	{
 		command: new SlashCommandBuilder()
 			.setName('roll')
@@ -58,6 +71,48 @@ export const commands: ICommandData[] = [
 			await interaction.editReply({
 				content: `${interaction.user.toString()} rolled \`${amount}\` \`D${sides}\``,
 				embeds: [createDiceEmbed(sides, amount, results, comment)],
+			});
+		},
+	},
+	{
+		command: new SlashCommandBuilder()
+			.setName('flip')
+			.setDescription('Flips a coin')
+			.addIntegerOption((option) =>
+				option
+					.setName('amount')
+					.setDescription('Number of coins')
+					.setRequired(false),
+			)
+			.addStringOption((option) =>
+				option
+					.setName('comment')
+					.setDescription('Extra comments to show on the result')
+					.setRequired(false),
+			),
+		async do(interaction) {
+			const amount = Math.abs(interaction.options.getInteger('amount') || 1);
+			const comments = interaction.options.getString('comment');
+
+			await animateReply('Flipping', interaction, 4);
+			const results = rollDice(2, amount).results.map((r) =>
+				r === 1 ? 'heads' : 'tails',
+			);
+
+			await interaction.editReply({
+				content: `${interaction.user.toString()} flipped \`${amount}\` ${pluralize('coin', amount)}`,
+				embeds: [
+					{
+						title: `🪙 Results (\`${amount} ${pluralize('coin', amount)}\`) 🪙`,
+						fields: [
+							{ name: 'Results', value: `\`${results.join('` · `')}\`` },
+							results.length > 1
+								? { name: 'Winner', value: findWinner(results) }
+								: null,
+							comments ? { name: 'Comments', value: `\`${comments}\`` } : null,
+						].filter((item) => !!item),
+					},
+				],
 			});
 		},
 	},
