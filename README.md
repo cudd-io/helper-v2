@@ -24,7 +24,7 @@ Modify `.env`, providing your own credentials
 Copy `.env` to all projects within the monorepo:
 
 ```sh
-bun run env:prepare
+bun run env:replace
 ```
 
 ### Setup the database
