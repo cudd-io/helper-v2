@@ -7,14 +7,19 @@
 	"scripts": {
 		"dev:client": "cd ./apps/client && bun run dev",
 		"dev:server": "cd ./apps/server && bun run dev",
+		"start:server": "cd ./apps/server && bun run start",
 		"build:client": "cd ./apps/client && bun run build",
 		"build:db": "cd ./packages/db && bun run build",
+		"build:server": "cd ./apps/server && bun run build",
 		"env:clear": "rm ./apps/client/.env && rm ./apps/server/.env && rm ./packages/db/.env",
 		"env:copy": "cp .env ./apps/client/.env && cp .env ./apps/server/.env && cp .env ./packages/db/.env",
 		"env:replace": "bun run env:clear && bun run env:copy",
 		"db:push": "cd ./packages/db && bun run db:push",
 		"db:studio": "cd ./packages/db && bun run db:studio",
-		"db:update": "cd ./packages/db && bun run update"
+		"db:update": "cd ./packages/db && bun run update",
+		"build": "bun run db:push && bun run build:db",
+		"start": "bun run start:server",
+		"action:clear-deployed-commands": "bun ./actions/clear-deployed-commands.ts"
 	},
 	"devDependencies": {
 		"bun-types": "latest"
@@ -23,6 +28,7 @@
 		"typescript": "^5.0.0"
 	},
 	"dependencies": {
-		"@libsql/client": "^0.15.0-pre.1"
+		"@libsql/client": "^0.15.0-pre.1",
+		"discord.js": "^14.16.3"
 	}
 }
