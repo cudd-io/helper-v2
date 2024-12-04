@@ -1,0 +1,4 @@
+[phases.build]
+cmds = ['bun run build']
+[start]
+cmd = "bun run db:push && bun run start"
