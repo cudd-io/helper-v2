@@ -12,6 +12,7 @@
 		"jsxImportSource": "hono/jsx",
 		"moduleResolution": "bundler",
 		"module": "esnext",
+		"target": "ES2018",
 		"types": ["bun-types"],
 		"outDir": "dist",
 		"baseUrl": ".",

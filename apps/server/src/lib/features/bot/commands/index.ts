@@ -5,6 +5,7 @@ import { delay, times } from '../../../utils';
 import { createDiceEmbed, rollDice } from '../components/dice';
 
 import { commands as accountCommands } from './accounts';
+import { commands as simpleCommands } from './user-commands/simple-commands';
 
 export const commands: ICommandData[] = [
 	{
@@ -60,6 +61,7 @@ export const commands: ICommandData[] = [
 		},
 	},
 	...accountCommands,
+	...simpleCommands,
 ];
 
 const animateReply = async (
