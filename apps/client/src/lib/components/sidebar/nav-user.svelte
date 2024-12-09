@@ -5,6 +5,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Sidebar from '$lib/components/ui/sidebar';
 	import { useSidebar } from '$lib/components/ui/sidebar';
+	import { authClient } from '$lib/features/auth/client';
 
 	let { user }: { user: { name: string; username: string; avatar: string } } = $props();
 	const sidebar = useSidebar();
@@ -73,7 +74,7 @@
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => authClient.signOut()}>
 					<LogOut />
 					Log out
 				</DropdownMenu.Item>

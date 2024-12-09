@@ -1,5 +1,12 @@
 import { sqliteTable, text, primaryKey } from 'drizzle-orm/sqlite-core';
 
+// global bot settings
+export const globalSettings = sqliteTable('global_settings', {
+	clientId: text('clientId').notNull().unique(),
+	status: text('status'),
+	statusType: text('statusType'),
+});
+
 export const discordUser = sqliteTable(
 	'discord_user',
 	{

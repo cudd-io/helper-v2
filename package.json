@@ -1,5 +1,5 @@
 {
-	"name": "bun-vite-react-hono-monorepo-starter",
+	"name": "helper",
 	"engines": {
 		"node": "22"
 	},
@@ -21,6 +21,7 @@
 		"db:push": "cd ./packages/db && bun run db:push",
 		"db:studio": "cd ./packages/db && bun run db:studio",
 		"db:update": "cd ./packages/db && bun run update",
+		"dev:all": "bun --filter '*' dev",
 		"build": "bun run build:db",
 		"start": "bun run start:server",
 		"postdeploy": "bun run db:push && bun run build",

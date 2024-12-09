@@ -17,6 +17,12 @@ app.get('/commands/global', (c) => {
 	return c.json(commandsJSON);
 });
 
+// app.get('/commands/simple', (c) => {
+// 	// const commandsJSON = commands.map((cmd) => cmd.command.toJSON());
+// 	// return c.json(commandsJSON);
+// 	return c.json(commands);
+// });
+
 app.get('/invite', async (c) => {
 	const client = bot.client;
 	const { redirect } = c.req.query();
