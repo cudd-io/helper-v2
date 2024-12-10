@@ -56,9 +56,15 @@ export const subcommandCreate = createSubcommand({
 			description,
 		});
 
+		console.log(
+			'refreshing simple commands after creation...',
+			interaction.guildId,
+		);
 		await bot
 			.refreshSimpleCommands(interaction.guildId ?? undefined)
 			.catch(() => bot.refreshSimpleCommands());
+		console.log('done');
+
 		interaction.reply({
 			content: '**Custom command created:**',
 			ephemeral: true,
