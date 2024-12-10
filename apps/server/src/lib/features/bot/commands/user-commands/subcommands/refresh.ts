@@ -21,7 +21,7 @@ export const subcommandRefresh = createSubcommand({
 		}
 
 		try {
-			await bot.refreshSimpleCommands(guild.id);
+			await bot.refreshSimpleCommands(interaction.guildId ?? undefined);
 
 			interaction.reply({
 				content: `Successfully refreshed commands`,
