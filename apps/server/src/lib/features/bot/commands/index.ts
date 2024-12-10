@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ICommandData } from '../types';
-import { CommandInteraction } from 'discord.js';
+import { ActivityType, CommandInteraction } from 'discord.js';
 import { delay, times } from '../../../utils';
 import { createDiceEmbed, rollDice } from '../modules/dice';
 
@@ -28,6 +28,33 @@ const findWinner = (results: string[]): string => {
 const pluralize = (word: string, count: number): string => {
 	return count !== 1 ? `${word}s` : word;
 };
+
+const activityTypes = [
+	{
+		name: 'Playing',
+		value: `${ActivityType.Playing}`,
+	},
+	{
+		name: 'Competing',
+		value: `${ActivityType.Competing}`,
+	},
+	{
+		name: 'Listening',
+		value: `${ActivityType.Listening}`,
+	},
+	{
+		name: 'Streaming',
+		value: `${ActivityType.Streaming}`,
+	},
+	{
+		name: 'Watching',
+		value: `${ActivityType.Watching}`,
+	},
+	{
+		name: 'Custom',
+		value: `${ActivityType.Custom}`,
+	},
+];
 
 export const commands: ICommandData[] = [
 	{
@@ -113,6 +140,40 @@ export const commands: ICommandData[] = [
 						].filter((item) => !!item),
 					},
 				],
+			});
+		},
+	},
+	{
+		command: new SlashCommandBuilder()
+			.setName('status')
+			.setDescription('Set my status message')
+			.addStringOption((option) =>
+				option
+					.setName('message')
+					.setDescription('The message to set')
+					.setRequired(true),
+			)
+			.addStringOption((option) =>
+				option
+					.setName('type')
+					.setDescription('The type of status')
+					.addChoices(...activityTypes),
+			),
+		async do(interaction) {
+			const name = interaction.options.getString('message', true);
+			const type = parseInt(
+				interaction.options.getString('type') || '4',
+			) as ActivityType;
+			const client = interaction.client;
+
+			client.user?.setActivity({
+				type,
+				name,
+			});
+
+			await interaction.reply({
+				content: `Status set to \`${name}\``,
+				ephemeral: true,
 			});
 		},
 	},
