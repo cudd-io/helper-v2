@@ -45,7 +45,8 @@ export class DiscordBot {
 			// Simple command handling
 			for (const simpleCommand of this.simpleCommands.values()) {
 				if (
-					message.content === simpleCommand.trigger &&
+					message.content.toLowerCase() ===
+						simpleCommand.trigger.toLowerCase() &&
 					message.guildId === simpleCommand.guildId
 				) {
 					await message.reply(simpleCommand.response);
