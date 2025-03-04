@@ -1,5 +1,4 @@
 import db from '$lib/db';
-import schema from '$lib/db/schema';
 import { ChatInputCommandInteraction } from 'discord.js';
 
 import { DiscordUser } from '@helper/db';
@@ -13,6 +12,10 @@ export const accountManager = {
 			discordId: interaction.user.id,
 			guildId: guild?.id || 'no-guild',
 		});
+	},
+
+	getAccountFromId: async (id: string, guildId: string) => {
+		return await discordUser.get({ discordId: id, guildId });
 	},
 
 	createAccount: async (

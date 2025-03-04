@@ -1,15 +1,19 @@
+import db from '$lib/db';
+import { delay } from '$lib/utils';
+import { SimpleCommand, SimpleCommandModel } from '@helper/db';
 import {
 	Client,
 	Events,
 	GatewayIntentBits,
+	Message,
+	OmitPartialGroupDMChannel,
 	REST,
 	Routes,
 	type Interaction,
 } from 'discord.js';
-import { ICommandData } from './types';
+import { handleMessage } from '../chat/api';
 import { commands } from './commands';
-import { SimpleCommand, SimpleCommandModel } from '@helper/db';
-import db from '$lib/db';
+import { ICommandData } from './types';
 
 export class DiscordBot {
 	public client: Client;
@@ -42,6 +46,8 @@ export class DiscordBot {
 			// Ignore messages from bots
 			if (message.author.bot) return;
 
+			if (!this.client.user) return console.warn('Bot user not set.');
+
 			// Simple command handling
 			for (const simpleCommand of this.simpleCommands.values()) {
 				if (
@@ -49,8 +55,14 @@ export class DiscordBot {
 						simpleCommand.trigger.toLowerCase() &&
 					message.guildId === simpleCommand.guildId
 				) {
-					await message.reply(simpleCommand.response);
+					return await message.reply(simpleCommand.response);
 				}
+			}
+			// check if helper is mentioned
+			if (message.mentions.has(this.client.user)) {
+				// for now, reply with the same message for testing
+				// await message.reply(message.content);
+				await this.handleChatInteraction(message);
 			}
 		});
 
@@ -58,6 +70,30 @@ export class DiscordBot {
 		this.client.on(Events.InteractionCreate, async (interaction) => {
 			await this.handleInteraction(interaction);
 		});
+	}
+
+	private async handleChatInteraction(
+		message: OmitPartialGroupDMChannel<Message<boolean>>,
+	) {
+		const response = await handleMessage(message, message.guildId ?? 'unknown');
+		if (response.choices[0]?.message?.content) {
+			const messageContent = response.choices[0].message.content;
+			// split the message into separate messages by {{break}}
+			const messageChunks = messageContent.split('{{break}}');
+			console.log(messageContent, {
+				length: messageChunks.length,
+			});
+
+			message.reply(messageChunks[0]);
+
+			for (const [index, chunk] of messageChunks.entries()) {
+				if (index == 0) continue;
+				await delay(500);
+				const newMessage = await message.channel?.send(chunk);
+			}
+		} else {
+			message.reply('oof looks like something went wrong? sorry about that');
+		}
 	}
 
 	public async start() {
