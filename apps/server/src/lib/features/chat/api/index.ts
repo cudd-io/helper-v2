@@ -78,7 +78,10 @@ export const handleMessage = async (
 			return {
 				...memberData,
 				presence: member.presence?.toJSON(),
-				pronouns: memberAccount?.pronouns ?? 'they/them',
+				account: {
+					...memberAccount,
+					pronouns: memberAccount?.pronouns ?? 'they/them',
+				},
 			};
 		});
 
@@ -122,23 +125,21 @@ export const handleMessage = async (
 			);
 		}
 
-		// add the new message to the history
-		// MESSAGE_HISTORY[guildId] = [...history, message];
-
 		return completion;
 	} catch (error) {
 		console.error(error);
-		return {
+		const response = {
 			choices: [
 				{
 					message: {
 						role: 'assistant',
-						content: `oops sorry, looks like something went wrong :(`,
+						message: `oops sorry, looks like something went wrong :(`,
 					},
 				},
 			],
 		};
-		// throw error;
+
+		return response;
 	}
 };
 
