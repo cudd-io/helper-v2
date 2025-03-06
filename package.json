@@ -25,7 +25,8 @@
 		"build": "bun run build:db",
 		"start": "bun run start:server",
 		"postdeploy": "bun run db:push && bun run build",
-		"action:clear-deployed-commands": "bun ./actions/clear-deployed-commands.ts"
+		"action:clear-deployed-commands": "bun ./actions/clear-deployed-commands.ts",
+		"clear": "bun run action:clear-deployed-commands"
 	},
 	"devDependencies": {
 		"bun-types": "latest"
