@@ -29,3 +29,11 @@ export const wrapText = (text: string, approximateLineLength: number = 30) => {
 		.map((line) => line.join(' '));
 	return lines.join('\n');
 };
+
+export const gracefullyTryParseJSON = (json: string): unknown => {
+	try {
+		return JSON.parse(json);
+	} catch (error) {
+		return json;
+	}
+};

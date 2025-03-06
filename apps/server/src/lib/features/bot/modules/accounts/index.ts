@@ -10,11 +10,11 @@ export const accountManager = {
 		const guild = interaction.guild;
 		return await discordUser.get({
 			discordId: interaction.user.id,
-			guildId: guild?.id || 'no-guild',
+			guildId: guild?.id || 'global',
 		});
 	},
 
-	getAccountFromId: async (id: string, guildId: string) => {
+	getAccountFromId: async (id: string, guildId: string = 'global') => {
 		return await discordUser.get({ discordId: id, guildId });
 	},
 
@@ -33,7 +33,7 @@ export const accountManager = {
 			{
 				discordId: interaction.user.id,
 				name: interaction.user.displayName,
-				guildId: guild?.id || 'no-guild',
+				guildId: guild?.id || 'global',
 				username: interaction.user.username,
 				joinedAt: `${member?.joinedTimestamp || Date.now().toString()}`,
 				pronouns: account.pronouns,

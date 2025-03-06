@@ -1,17 +1,20 @@
 import db from '$lib/db';
 import { delay } from '$lib/utils';
 import { SimpleCommand, SimpleCommandModel } from '@helper/db';
+
 import {
+	ChannelType,
 	Client,
 	Events,
 	GatewayIntentBits,
 	Message,
 	OmitPartialGroupDMChannel,
+	Partials,
 	REST,
 	Routes,
 	type Interaction,
 } from 'discord.js';
-import { handleMessage } from '../chat/api';
+import { handleMessage } from '../chat';
 import { commands } from './commands';
 import { ICommandData } from './types';
 
@@ -27,8 +30,21 @@ export class DiscordBot {
 		this.client = new Client({
 			intents: [
 				GatewayIntentBits.Guilds,
+				GatewayIntentBits.GuildMembers,
+				GatewayIntentBits.GuildEmojisAndStickers,
+				GatewayIntentBits.GuildPresences,
+				GatewayIntentBits.GuildVoiceStates,
+				GatewayIntentBits.GuildMessageReactions,
 				GatewayIntentBits.GuildMessages,
+				GatewayIntentBits.DirectMessages,
 				GatewayIntentBits.MessageContent,
+			],
+			partials: [
+				Partials.Channel,
+				Partials.Message,
+				Partials.Reaction,
+				Partials.User,
+				Partials.GuildMember,
 			],
 		});
 
@@ -43,9 +59,9 @@ export class DiscordBot {
 
 		// Handle incoming messages
 		this.client.on(Events.MessageCreate, async (message) => {
+			// console.log('message create', message);
 			// Ignore messages from bots
 			if (message.author.bot) return;
-
 			if (!this.client.user) return console.warn('Bot user not set.');
 
 			// Simple command handling
@@ -55,11 +71,17 @@ export class DiscordBot {
 						simpleCommand.trigger.toLowerCase() &&
 					message.guildId === simpleCommand.guildId
 				) {
+					if (message.channel.type == ChannelType.DM) {
+						return await message.author.send(simpleCommand.response);
+					}
 					return await message.reply(simpleCommand.response);
 				}
 			}
-			// check if helper is mentioned
-			if (message.mentions.has(this.client.user)) {
+			// When helper is mentioned or sent a DM, treat it as a chat interaction
+			if (
+				message.mentions.has(this.client.user) ||
+				message.channel.type === ChannelType.DM
+			) {
 				// for now, reply with the same message for testing
 				// await message.reply(message.content);
 				await this.handleChatInteraction(message);
@@ -75,24 +97,52 @@ export class DiscordBot {
 	private async handleChatInteraction(
 		message: OmitPartialGroupDMChannel<Message<boolean>>,
 	) {
-		const response = await handleMessage(message, message.guildId ?? 'unknown');
+		await message.channel.sendTyping();
+
+		const interval = setInterval(() => {
+			// send typing every 11 seconds until the response is received
+			message.channel.sendTyping();
+		}, 11000);
+
+		const response = await handleMessage(message, this.client);
+		clearInterval(interval);
+
 		if (response.choices[0]?.message?.content) {
 			const messageContent = response.choices[0].message.content;
 			// split the message into separate messages by {{break}}
 			const messageChunks = messageContent.split('{{break}}');
-			console.log(messageContent, {
-				length: messageChunks.length,
-			});
 
-			message.reply(messageChunks[0]);
+			if (message.channel.type !== ChannelType.DM) {
+				await message.reply(messageChunks[0]);
+			} else {
+				await message.author.send(messageChunks[0]);
+			}
 
 			for (const [index, chunk] of messageChunks.entries()) {
-				if (index == 0) continue;
-				await delay(500);
-				const newMessage = await message.channel?.send(chunk);
+				if (index === 0) continue;
+				// send typing for the next message until it's sent
+				await message.channel.sendTyping();
+
+				// get the delay time for the next message from {{delay:x}} in the message. If it's not found, set the delay to 500ms
+				const delayTime = chunk.match(/\{\{delay:(\d+)\}\}/)?.[1] ?? null;
+				const messageContent = chunk.replace(/\{\{delay:(\d+)\}\}/g, '');
+
+				await delay(Number(delayTime ?? 500));
+
+				if (message.channel.type !== ChannelType.DM) {
+					await message.channel?.send(messageContent);
+				} else {
+					await message.author.send(messageContent);
+				}
 			}
 		} else {
-			message.reply('oof looks like something went wrong? sorry about that');
+			if (message.channel.type !== ChannelType.DM) {
+				message.reply('oof looks like something went wrong? sorry about that');
+			} else {
+				message.author.send(
+					'oof looks like something went wrong? sorry about that',
+				);
+			}
 		}
 	}
 
